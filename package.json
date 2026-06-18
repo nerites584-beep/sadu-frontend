@@ -1,0 +1,21 @@
+{
+  "name": "sadu-frontend",
+  "version": "1.0.0",
+  "description": "Frontend del Sistema Administrativo Documental Unificado - SADU",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "ejs": "^3.1.10",
+    "express": "^5.2.1",
+    "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.14"
+  }
+}

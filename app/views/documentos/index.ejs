@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SADU - Documentos</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+    <header>
+        <h1>SADU - Sistema Administrativo Documental Unificado</h1>
+        <nav>
+            <a href="/documentos">Documentos</a>
+            <a href="/usuarios">Usuarios</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="encabezado-seccion">
+            <h2>Gestión de Documentos</h2>
+            <a href="/documentos/nuevo" class="btn-primary">+ Nuevo Documento</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Radicado</th>
+                    <th>Título</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Dependencia</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (documentos && documentos.length > 0) { %>
+                    <% documentos.forEach(doc => { %>
+                        <tr>
+                            <td><%= doc.radicado %></td>
+                            <td><%= doc.titulo %></td>
+                            <td><%= doc.tipo %></td>
+                            <td><%= doc.estado %></td>
+                            <td><%= doc.dependencia %></td>
+                            <td><%= doc.fecha_registro %></td>
+                            <td>
+                                <a href="/documentos/editar/<%= doc.id %>" class="btn-editar">Editar</a>
+                                <form action="/documentos/eliminar/<%= doc.id %>" method="POST" style="display:inline">
+                                    <button type="submit" class="btn-eliminar"
+                                        onclick="return confirm('¿Eliminar este documento?')">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="7">No hay documentos registrados.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
