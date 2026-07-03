@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SADU - Iniciar sesión</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body class="pagina-login">
+    <div class="tarjeta-login">
+        <div class="login-marca">
+            <span class="sidebar-logo grande">S</span>
+            <h1>SADU</h1>
+            <p>Sistema Administrativo Documental Unificado</p>
+            <p class="login-entidad">Alcaldía Municipal de San Antonio del Tequendama</p>
+        </div>
+
+        <% if (error) { %>
+            <div class="alerta alerta-error"><%= error %></div>
+        <% } %>
+
+        <form action="/login" method="POST" class="formulario">
+            <div class="campo">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email"
+                    placeholder="usuario@sanantonio.gov.co" required autofocus>
+            </div>
+
+            <div class="campo">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password"
+                    placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-primary btn-bloque">Ingresar</button>
+        </form>
+
+        <p class="login-nota">Acceso restringido a funcionarios autorizados</p>
+    </div>
+</body>
+</html>

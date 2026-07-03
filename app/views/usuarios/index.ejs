@@ -1,62 +1,49 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SADU - Usuarios</title>
-    <link rel="stylesheet" href="/css/estilos.css">
-</head>
-<body>
-    <header>
-        <h1>SADU - Sistema Administrativo Documental Unificado</h1>
-        <nav>
-            <a href="/documentos">Documentos</a>
-            <a href="/usuarios">Usuarios</a>
-        </nav>
-    </header>
+<%- include('../partials/cabecera', { titulo: 'Gestión de Usuarios', usuario, activo: 'usuarios' }) %>
 
-    <main>
-        <div class="encabezado-seccion">
-            <h2>Gestión de Usuarios</h2>
-            <a href="/usuarios/nuevo" class="btn-primary">+ Nuevo Usuario</a>
-        </div>
+<section class="panel">
+    <div class="encabezado-seccion">
+        <h2>Usuarios del sistema</h2>
+        <a href="/usuarios/nuevo" class="btn-primary">+ Nuevo Usuario</a>
+    </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Email</th>
-                    <th>Rol</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% if (usuarios && usuarios.length > 0) { %>
-                    <% usuarios.forEach(u => { %>
-                        <tr>
-                            <td><%= u.id %></td>
-                            <td><%= u.nombre %></td>
-                            <td><%= u.email %></td>
-                            <td><%= u.rol %></td>
-                            <td>
-                                <a href="/usuarios/editar/<%= u.id %>" class="btn-editar">Editar</a>
-                                <form action="/usuarios/eliminar/<%= u.id %>" method="POST" style="display:inline">
-                                    <button type="submit" class="btn-eliminar"
-                                        onclick="return confirm('¿Eliminar este usuario?')">
-                                        Eliminar
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    <% }) %>
-                <% } else { %>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (usuarios && usuarios.length > 0) { %>
+                <% usuarios.forEach(u => { %>
                     <tr>
-                        <td colspan="5">No hay usuarios registrados.</td>
+                        <td><%= u.id %></td>
+                        <td><%= u.nombre %></td>
+                        <td><%= u.email %></td>
+                        <td><span class="badge badge-rol"><%= u.rol %></span></td>
+                        <td class="celda-acciones">
+                            <a href="/usuarios/editar/<%= u.id %>" class="btn-editar">Editar</a>
+                            <% if (u.id !== usuario.id) { %>
+                            <form action="/usuarios/eliminar/<%= u.id %>" method="POST" style="display:inline">
+                                <button type="submit" class="btn-eliminar"
+                                    onclick="return confirm('¿Eliminar este usuario?')">
+                                    Eliminar
+                                </button>
+                            </form>
+                            <% } %>
+                        </td>
                     </tr>
-                <% } %>
-            </tbody>
-        </table>
-    </main>
-</body>
-</html>
+                <% }) %>
+            <% } else { %>
+                <tr>
+                    <td colspan="5">No hay usuarios registrados.</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</section>
+
+<%- include('../partials/pie') %>

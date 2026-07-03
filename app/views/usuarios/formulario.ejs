@@ -1,62 +1,54 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SADU - <%= accion %> Usuario</title>
-    <link rel="stylesheet" href="/css/estilos.css">
-</head>
-<body>
-    <header>
-        <h1>SADU - Sistema Administrativo Documental Unificado</h1>
-        <nav>
-            <a href="/documentos">Documentos</a>
-            <a href="/usuarios">Usuarios</a>
-        </nav>
-    </header>
+<%- include('../partials/cabecera', { titulo: accion + ' Usuario', usuario, activo: 'usuarios' }) %>
 
-    <main>
-        <h2><%= accion %> Usuario</h2>
+<section class="panel panel-formulario">
+    <% if (errores && errores.length > 0) { %>
+        <div class="alerta alerta-error">
+            <strong>Corrija los siguientes errores:</strong>
+            <ul>
+                <% errores.forEach(e => { %><li><%= e %></li><% }) %>
+            </ul>
+        </div>
+    <% } %>
 
-        <form action="" method="POST" class="formulario">
-            <div class="campo">
-                <label for="nombre">Nombre completo</label>
-                <input type="text" id="nombre" name="nombre"
-                    value="<%= usuario ? usuario.nombre : '' %>"
-                    placeholder="Nombre del funcionario" required>
-            </div>
+    <form action="" method="POST" class="formulario">
+        <div class="campo">
+            <label for="nombre">Nombre completo</label>
+            <input type="text" id="nombre" name="nombre"
+                value="<%= usuarioEditado ? usuarioEditado.nombre : '' %>"
+                placeholder="Nombre del funcionario" required>
+        </div>
 
-            <div class="campo">
-                <label for="email">Correo electrónico</label>
-                <input type="email" id="email" name="email"
-                    value="<%= usuario ? usuario.email : '' %>"
-                    placeholder="correo@sanantonio.gov.co" required>
-            </div>
+        <div class="campo">
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" name="email"
+                value="<%= usuarioEditado ? usuarioEditado.email : '' %>"
+                placeholder="correo@sanantonio.gov.co" required>
+        </div>
 
-            <div class="campo">
-                <label for="rol">Rol</label>
-                <select id="rol" name="rol" required>
-                    <% ['Administrador','Funcionario','Consulta Ciudadana'].forEach(r => { %>
-                        <option value="<%= r %>" <%= usuario && usuario.rol === r ? 'selected' : '' %>>
-                            <%= r %>
-                        </option>
-                    <% }) %>
-                </select>
-            </div>
+        <div class="campo">
+            <label for="rol">Rol</label>
+            <select id="rol" name="rol" required>
+                <% ['Administrador','Funcionario','Consulta'].forEach(r => { %>
+                    <option value="<%= r %>" <%= usuarioEditado && usuarioEditado.rol === r ? 'selected' : '' %>>
+                        <%= r %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
 
-            <% if (!usuario) { %>
-            <div class="campo">
-                <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password"
-                    placeholder="Contraseña" required>
-            </div>
-            <% } %>
+        <% if (accion === 'Registrar') { %>
+        <div class="campo">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="password"
+                placeholder="Mínimo 8 caracteres, mayúscula, minúscula y número" required>
+        </div>
+        <% } %>
 
-            <div class="acciones">
-                <button type="submit" class="btn-primary"><%= accion %></button>
-                <a href="/usuarios" class="btn-cancelar">Cancelar</a>
-            </div>
-        </form>
-    </main>
-</body>
-</html>
+        <div class="acciones">
+            <button type="submit" class="btn-primary"><%= accion %></button>
+            <a href="/usuarios" class="btn-cancelar">Cancelar</a>
+        </div>
+    </form>
+</section>
+
+<%- include('../partials/pie') %>
