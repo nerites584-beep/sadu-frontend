@@ -1,0 +1,9 @@
+<%- include('partials/cabecera', { titulo, usuario, activo: '' }) %>
+
+<div class="panel panel-error">
+    <h2>⚠️ <%= titulo %></h2>
+    <p><%= mensaje %></p>
+    <a href="/dashboard" class="btn-primary">Volver al dashboard</a>
+</div>
+
+<%- include('partials/pie') %>

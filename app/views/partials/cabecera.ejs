@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SADU - <%= titulo %></title>
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <div class="sidebar-marca">
+            <span class="sidebar-logo">S</span>
+            <div>
+                <strong>SADU</strong>
+                <small>Gestión Documental</small>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/dashboard" class="<%= activo === 'dashboard' ? 'activo' : '' %>">📊 Dashboard</a>
+            <a href="/documentos" class="<%= activo === 'documentos' ? 'activo' : '' %>">📄 Documentos</a>
+            <% if (usuario && usuario.rol === 'Administrador') { %>
+            <a href="/usuarios" class="<%= activo === 'usuarios' ? 'activo' : '' %>">👥 Usuarios</a>
+            <% } %>
+        </nav>
+        <div class="sidebar-pie">
+            Alcaldía Municipal<br>San Antonio del Tequendama
+        </div>
+    </aside>
+
+    <div class="contenido">
+        <header class="topbar">
+            <h1><%= titulo %></h1>
+            <% if (usuario) { %>
+            <div class="topbar-usuario">
+                <div class="usuario-info">
+                    <strong><%= usuario.nombre %></strong>
+                    <span class="badge badge-rol"><%= usuario.rol %></span>
+                </div>
+                <a href="/logout" class="btn-salir">Cerrar sesión</a>
+            </div>
+            <% } %>
+        </header>
+        <main>

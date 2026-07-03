@@ -1,63 +1,97 @@
-import fetch from 'node-fetch'
-import config from '../config/environments/index.js'
-
-const API = `${config.backendUrl}/usuario`
+import { apiFetch } from '../utils/api.js'
 
 export const listarUsuarios = async (req, res) => {
     try {
-        const response = await fetch(API)
-        const [usuarios] = await response.json()
-        res.render('usuarios/index', { usuarios })
-    } catch (error) {
-        res.status(500).send('Error al obtener usuarios')
+        const { ok, status, datos: usuarios } = await apiFetch(req, '/usuario')
+
+        if (status === 401) return res.redirect('/logout')
+        if (!ok) throw new Error('Error consultando usuarios')
+
+        res.render('usuarios/index', {
+            usuario: req.session.usuario,
+            usuarios
+        })
+    } catch {
+        res.status(500).render('error', {
+            usuario: req.session?.usuario,
+            titulo: 'Error de conexión',
+            mensaje: 'No fue posible obtener los usuarios del backend.'
+        })
     }
 }
 
 export const verFormularioCrear = (req, res) => {
-    res.render('usuarios/formulario', { usuario: null, accion: 'Registrar' })
+    res.render('usuarios/formulario', {
+        usuario: req.session.usuario,
+        usuarioEditado: null,
+        accion: 'Registrar',
+        errores: null
+    })
 }
 
 export const crearUsuario = async (req, res) => {
     try {
-        await fetch(API, {
+        const { ok, datos } = await apiFetch(req, '/usuario', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(req.body)
         })
+
+        if (!ok) {
+            return res.status(400).render('usuarios/formulario', {
+                usuario: req.session.usuario,
+                usuarioEditado: req.body,
+                accion: 'Registrar',
+                errores: datos?.errores || [datos?.mensaje || 'Error al crear el usuario']
+            })
+        }
         res.redirect('/usuarios')
-    } catch (error) {
-        res.status(500).send('Error al crear usuario')
+    } catch {
+        res.status(500).send('Error de conexión al crear usuario')
     }
 }
 
 export const verFormularioEditar = async (req, res) => {
     try {
-        const response = await fetch(`${API}/${req.params.id}`)
-        const [rows] = await response.json()
-        res.render('usuarios/formulario', { usuario: rows[0], accion: 'Actualizar' })
-    } catch (error) {
-        res.status(500).send('Error al obtener usuario')
+        const { ok, datos: usuarioEditado } = await apiFetch(req, `/usuario/${req.params.id}`)
+        if (!ok) return res.redirect('/usuarios')
+
+        res.render('usuarios/formulario', {
+            usuario: req.session.usuario,
+            usuarioEditado,
+            accion: 'Actualizar',
+            errores: null
+        })
+    } catch {
+        res.status(500).send('Error de conexión al consultar usuario')
     }
 }
 
 export const editarUsuario = async (req, res) => {
     try {
-        await fetch(`${API}/${req.params.id}`, {
+        const { ok, datos } = await apiFetch(req, `/usuario/${req.params.id}`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(req.body)
         })
+
+        if (!ok) {
+            return res.status(400).render('usuarios/formulario', {
+                usuario: req.session.usuario,
+                usuarioEditado: { ...req.body, id: req.params.id },
+                accion: 'Actualizar',
+                errores: datos?.errores || [datos?.mensaje || 'Error al actualizar el usuario']
+            })
+        }
         res.redirect('/usuarios')
-    } catch (error) {
-        res.status(500).send('Error al actualizar usuario')
+    } catch {
+        res.status(500).send('Error de conexión al actualizar usuario')
     }
 }
 
 export const eliminarUsuario = async (req, res) => {
     try {
-        await fetch(`${API}/${req.params.id}`, { method: 'DELETE' })
+        await apiFetch(req, `/usuario/${req.params.id}`, { method: 'DELETE' })
         res.redirect('/usuarios')
-    } catch (error) {
-        res.status(500).send('Error al eliminar usuario')
+    } catch {
+        res.status(500).send('Error de conexión al eliminar usuario')
     }
 }
