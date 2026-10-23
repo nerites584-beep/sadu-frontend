@@ -18,7 +18,7 @@
                 <th>Dependencia</th>
                 <th>Fecha</th>
                 <th>Responsable</th>
-                <% if (usuario.rol !== 'Consulta') { %><th>Acciones</th><% } %>
+                <% if (usuario.rol !== 'Consulta') { %><th>PDF</th><th>Acciones</th><% } %>
             </tr>
         </thead>
         <tbody>
@@ -33,6 +33,13 @@
                         <td><%= doc.fecha_registro %></td>
                         <td><%= doc.usuario_nombre || '—' %></td>
                         <% if (usuario.rol !== 'Consulta') { %>
+                        <td>
+                            <% if (doc.archivo) { %>
+                            <a href="/documentos/<%= doc.id %>/archivo" target="_blank" rel="noopener" class="btn-pdf">Ver PDF</a>
+                            <% } else { %>
+                            <span class="sin-archivo">Sin PDF</span>
+                            <% } %>
+                        </td>
                         <td class="celda-acciones">
                             <a href="/documentos/editar/<%= doc.id %>" class="btn-editar">Editar</a>
                             <% if (usuario.rol === 'Administrador') { %>
@@ -49,7 +56,7 @@
                 <% }) %>
             <% } else { %>
                 <tr>
-                    <td colspan="8">No hay documentos registrados.</td>
+                    <td colspan="9">No hay documentos registrados.</td>
                 </tr>
             <% } %>
         </tbody>

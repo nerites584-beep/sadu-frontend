@@ -10,7 +10,7 @@
         </div>
     <% } %>
 
-    <form action="" method="POST" class="formulario">
+    <form action="" method="POST" class="formulario" enctype="multipart/form-data">
         <div class="campo">
             <label for="radicado">Radicado</label>
             <input type="text" id="radicado" name="radicado"
@@ -72,8 +72,26 @@
                 value="<%= documento ? documento.fecha_registro : '' %>" required>
         </div>
 
+        <div class="campo">
+            <label for="archivo">Documento PDF <span class="opcional">(opcional, máximo 10 MB)</span></label>
+            <% if (documento && documento.archivo) { %>
+            <p class="archivo-actual">
+                Archivo actual:
+                <a href="/documentos/<%= documento.id %>/archivo" target="_blank" rel="noopener">📎 <%= documento.archivo_nombre || 'Ver PDF' %></a>
+            </p>
+            <% } %>
+            <input type="file" id="archivo" name="archivo" accept="application/pdf,.pdf">
+            <small class="ayuda">
+                <%= documento && documento.archivo
+                    ? 'Si selecciona otro PDF, reemplaza el archivo actual.'
+                    : 'Adjunte el documento firmado o escaneado en formato PDF.' %>
+            </small>
+        </div>
+
         <% if (accion === 'Actualizar') { %>
         <input type="hidden" name="usuario_id" value="<%= documento ? documento.usuario_id : '' %>">
+        <input type="hidden" name="archivo_actual" value="<%= documento && documento.archivo ? documento.archivo : '' %>">
+        <input type="hidden" name="archivo_nombre_actual" value="<%= documento && documento.archivo_nombre ? documento.archivo_nombre : '' %>">
         <% } %>
 
         <div class="acciones">

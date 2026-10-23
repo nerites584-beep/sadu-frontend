@@ -472,3 +472,54 @@ tr:hover td {
     color: var(--texto-suave);
     margin-top: 18px;
 }
+
+/* ---------- Archivo PDF de los documentos ---------- */
+
+.btn-pdf {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 7px;
+    font-size: 13px;
+    text-decoration: none;
+    background: #e2f3e6;
+    color: var(--verde);
+    white-space: nowrap;
+}
+
+.btn-pdf:hover {
+    background: #cfead6;
+}
+
+.sin-archivo {
+    font-size: 12px;
+    color: var(--texto-suave);
+    white-space: nowrap;
+}
+
+.formulario input[type="file"] {
+    padding: 8px;
+    background: var(--gris-fondo);
+    cursor: pointer;
+}
+
+.formulario .opcional {
+    font-weight: normal;
+    color: var(--texto-suave);
+}
+
+.formulario .ayuda {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--texto-suave);
+}
+
+.archivo-actual {
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.archivo-actual a {
+    color: var(--azul-medio);
+    font-weight: bold;
+}
