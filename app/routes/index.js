@@ -8,6 +8,9 @@ const router = Router()
 
 router.get('/', (req, res) => res.redirect('/dashboard'))
 
+// Verificación de estado para el hosting
+router.get('/salud', (req, res) => res.json({ estado: 'ok', servicio: 'sadu-frontend' }))
+
 router.use(authRoutes)
 router.use(dashboardRoutes)
 router.use(documentoRoutes)
