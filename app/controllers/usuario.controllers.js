@@ -1,4 +1,5 @@
 import { apiFetch } from '../utils/api.js'
+import { guardarAviso } from '../middlewares/aviso.js'
 
 export const listarUsuarios = async (req, res) => {
     try {
@@ -44,6 +45,7 @@ export const crearUsuario = async (req, res) => {
                 errores: datos?.errores || [datos?.mensaje || 'Error al crear el usuario']
             })
         }
+        guardarAviso(req, 'exito', 'Usuario creado correctamente')
         res.redirect('/usuarios')
     } catch {
         res.status(500).send('Error de conexión al crear usuario')
@@ -81,6 +83,7 @@ export const editarUsuario = async (req, res) => {
                 errores: datos?.errores || [datos?.mensaje || 'Error al actualizar el usuario']
             })
         }
+        guardarAviso(req, 'exito', 'Usuario actualizado correctamente')
         res.redirect('/usuarios')
     } catch {
         res.status(500).send('Error de conexión al actualizar usuario')
@@ -89,7 +92,8 @@ export const editarUsuario = async (req, res) => {
 
 export const eliminarUsuario = async (req, res) => {
     try {
-        await apiFetch(req, `/usuario/${req.params.id}`, { method: 'DELETE' })
+        const { ok, datos } = await apiFetch(req, `/usuario/${req.params.id}`, { method: 'DELETE' })
+        guardarAviso(req, ok ? 'exito' : 'error', datos?.mensaje || (ok ? 'Usuario eliminado' : 'No fue posible eliminar el usuario'))
         res.redirect('/usuarios')
     } catch {
         res.status(500).send('Error de conexión al eliminar usuario')
