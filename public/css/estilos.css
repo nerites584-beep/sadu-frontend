@@ -774,6 +774,63 @@ tr:hover td {
     margin-bottom: 0;
 }
 
+/* ---------- Catálogos y auditoría ---------- */
+
+.formulario-en-linea {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.formulario-en-linea input {
+    flex: 1;
+    min-width: 0;
+    padding: 9px 12px;
+    border: 1px solid var(--gris-borde);
+    border-radius: 7px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.rejilla-catalogos {
+    margin-top: 0;
+    align-items: start;
+}
+
+.fila-inactiva td {
+    color: var(--texto-suave);
+}
+
+.nota-pantalla {
+    font-size: 13px;
+    color: var(--texto-suave);
+    margin-bottom: 16px;
+}
+
+.celda-fecha {
+    white-space: nowrap;
+}
+
+.paginacion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--texto-suave);
+}
+
+/* Texto solo para lectores de pantalla */
+.solo-lectores {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
 /* ---------- Tablas con desplazamiento horizontal ---------- */
 
 .tabla-responsive {

@@ -1,0 +1,97 @@
+<%- include('../partials/cabecera', { titulo: 'Auditoría', usuario, activo: 'auditoria' }) %>
+
+<%
+    const NOMBRES_ACCION = {
+        INICIO_SESION: 'Inicio de sesión', INTENTO_FALLIDO: 'Intento fallido', CUENTA_BLOQUEADA: 'Cuenta bloqueada',
+        CREAR: 'Crear', EDITAR: 'Editar', ELIMINAR: 'Eliminar', CARGAR_PDF: 'Cargar PDF', EXPORTAR: 'Exportar'
+    }
+    const NOMBRES_ENTIDAD = {
+        sesion: 'Sesión', documento: 'Documento', usuario: 'Usuario', reporte: 'Reporte',
+        dependencia: 'Dependencia', tipo_documento: 'Tipo de documento'
+    }
+    const CLASE_ACCION = {
+        INTENTO_FALLIDO: 'estado-entrmite', CUENTA_BLOQUEADA: 'estado-anulado', ELIMINAR: 'estado-anulado',
+        CREAR: 'estado-activo', INICIO_SESION: 'estado-activo'
+    }
+%>
+
+<section class="panel">
+    <form action="/auditoria" method="GET" class="filtros" role="search" aria-label="Filtrar auditoría">
+        <div class="filtro">
+            <label for="a-accion">Acción</label>
+            <select id="a-accion" name="accion">
+                <option value="">Todas</option>
+                <% acciones.forEach(a => { %>
+                <option value="<%= a %>" <%= filtros.accion === a ? 'selected' : '' %>><%= NOMBRES_ACCION[a] || a %></option>
+                <% }) %>
+            </select>
+        </div>
+        <div class="filtro">
+            <label for="a-usuario">Usuario</label>
+            <input type="search" id="a-usuario" name="usuario" value="<%= filtros.usuario || '' %>"
+                placeholder="Correo del usuario" maxlength="100">
+        </div>
+        <div class="filtro">
+            <label for="a-desde">Desde</label>
+            <input type="date" id="a-desde" name="desde" value="<%= filtros.desde || '' %>">
+        </div>
+        <div class="filtro">
+            <label for="a-hasta">Hasta</label>
+            <input type="date" id="a-hasta" name="hasta" value="<%= filtros.hasta || '' %>">
+        </div>
+        <div class="filtro-acciones">
+            <button type="submit" class="btn-primary">🔍 Filtrar</button>
+            <% if (Object.keys(filtros).length > 0) { %>
+            <a href="/auditoria" class="btn-cancelar">Limpiar</a>
+            <% } %>
+        </div>
+    </form>
+</section>
+
+<section class="panel">
+    <div class="encabezado-seccion">
+        <div>
+            <h2>Bitácora de acciones</h2>
+            <p class="resultado-busqueda"><%= total %> registro(s) · página <%= pagina %> de <%= paginas %></p>
+        </div>
+    </div>
+
+    <div class="tabla-responsive">
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha y hora</th>
+                <th>Usuario</th>
+                <th>Acción</th>
+                <th>Sobre</th>
+                <th>Detalle</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (registros.length > 0) { %>
+                <% registros.forEach(r => { %>
+                <tr>
+                    <td class="celda-fecha"><%= r.fechaTexto %></td>
+                    <td><%= r.usuario_email || '—' %></td>
+                    <td><span class="badge <%= CLASE_ACCION[r.accion] || '' %>"><%= NOMBRES_ACCION[r.accion] || r.accion %></span></td>
+                    <td><%= NOMBRES_ENTIDAD[r.entidad] || r.entidad %><%= r.entidad_id ? ' #' + r.entidad_id : '' %></td>
+                    <td><%= r.detalle || '' %></td>
+                </tr>
+                <% }) %>
+            <% } else { %>
+                <tr><td colspan="5">No hay registros de auditoría con estos filtros.</td></tr>
+            <% } %>
+        </tbody>
+    </table>
+    </div>
+
+    <% if (paginas > 1) { %>
+    <nav class="paginacion" aria-label="Páginas de la auditoría">
+        <% if (pagina > 1) { %><a href="<%= enlacePagina(pagina - 1) %>" class="btn-secundario">← Anterior</a><% } %>
+        <span>Página <%= pagina %> de <%= paginas %></span>
+        <% if (pagina < paginas) { %><a href="<%= enlacePagina(pagina + 1) %>" class="btn-secundario">Siguiente →</a><% } %>
+    </nav>
+    <% } %>
+</section>
+
+<%- include('../partials/pie') %>
