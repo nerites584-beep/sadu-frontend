@@ -1,0 +1,48 @@
+<%# Tabla de un catálogo con formulario para agregar. Recibe: titulo, clase, items, placeholder %>
+<section class="panel">
+    <div class="encabezado-seccion">
+        <h2><%= titulo %></h2>
+        <span class="resultado-busqueda"><%= items.filter(i => i.activo).length %> activos de <%= items.length %></span>
+    </div>
+
+    <form action="/catalogos/<%= clase %>" method="POST" class="formulario-en-linea">
+        <label for="nuevo-<%= clase %>" class="solo-lectores">Nuevo valor</label>
+        <input type="text" id="nuevo-<%= clase %>" name="nombre" placeholder="<%= placeholder %>"
+            minlength="3" maxlength="100" required>
+        <button type="submit" class="btn-primary">+ Agregar</button>
+    </form>
+
+    <div class="tabla-responsive">
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Documentos</th>
+                <th>Estado</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% items.forEach(item => { %>
+            <tr class="<%= item.activo ? '' : 'fila-inactiva' %>">
+                <td><%= item.nombre %></td>
+                <td><%= item.documentos %></td>
+                <td>
+                    <span class="badge <%= item.activo ? 'estado-activo' : 'estado-archivado' %>">
+                        <%= item.activo ? 'Activo' : 'Inactivo' %>
+                    </span>
+                </td>
+                <td>
+                    <form action="/catalogos/<%= clase %>/<%= item.id %>/estado" method="POST" style="display:inline">
+                        <input type="hidden" name="activo" value="<%= item.activo ? 'false' : 'true' %>">
+                        <button type="submit" class="<%= item.activo ? 'btn-eliminar' : 'btn-editar' %>">
+                            <%= item.activo ? 'Desactivar' : 'Activar' %>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+    </div>
+</section>

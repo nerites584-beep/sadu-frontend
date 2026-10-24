@@ -1,0 +1,19 @@
+<%- include('../partials/cabecera', { titulo: 'Catálogos', usuario, activo: 'catalogos' }) %>
+
+<p class="nota-pantalla">
+    Los valores desactivados dejan de aparecer al radicar documentos nuevos,
+    pero se conservan en los documentos que ya los usan y en los filtros de búsqueda.
+</p>
+
+<div class="rejilla-graficos rejilla-catalogos">
+    <%- include('../partials/tabla-catalogo', {
+        titulo: 'Dependencias', clase: 'dependencia', items: dependencias,
+        placeholder: 'Ej: Secretaría de Desarrollo Económico'
+    }) %>
+    <%- include('../partials/tabla-catalogo', {
+        titulo: 'Tipos de documento', clase: 'tipo', items: tipos,
+        placeholder: 'Ej: Comunicación Externa'
+    }) %>
+</div>
+
+<%- include('../partials/pie') %>

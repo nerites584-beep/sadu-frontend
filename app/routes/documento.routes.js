@@ -10,11 +10,12 @@ import {
 } from '../controllers/documento.controllers.js'
 import { requiereSesion, requiereRol } from '../middlewares/sesion.js'
 import { recibirPdf } from '../middlewares/archivo.js'
+import { cargarCatalogos } from '../middlewares/catalogos.js'
 
 const router = Router()
 
 // Todas las rutas de documentos exigen sesión iniciada
-router.use('/documentos', requiereSesion)
+router.use('/documentos', requiereSesion, cargarCatalogos)
 
 router.get('/documentos', listarDocumentos)
 

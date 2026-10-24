@@ -18,7 +18,7 @@
         <label for="f-tipo">Tipo</label>
         <select id="f-tipo" name="tipo">
             <option value="">Todos</option>
-            <% catalogos.TIPOS_DOCUMENTO.forEach(t => { %>
+            <% catalogos.TODOS_TIPOS.forEach(t => { %>
             <option value="<%= t %>" <%= filtros.tipo === t ? 'selected' : '' %>><%= t %></option>
             <% }) %>
         </select>
@@ -27,7 +27,7 @@
         <label for="f-dependencia">Dependencia</label>
         <select id="f-dependencia" name="dependencia">
             <option value="">Todas</option>
-            <% catalogos.DEPENDENCIAS.forEach(d => { %>
+            <% catalogos.TODAS_DEPENDENCIAS.forEach(d => { %>
             <option value="<%= d %>" <%= filtros.dependencia === d ? 'selected' : '' %>><%= d %></option>
             <% }) %>
         </select>

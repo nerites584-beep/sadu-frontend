@@ -24,6 +24,8 @@
             <% } %>
             <% if (usuario && usuario.rol === 'Administrador') { %>
             <a href="/usuarios" class="<%= activo === 'usuarios' ? 'activo' : '' %>">👥 Usuarios</a>
+            <a href="/catalogos" class="<%= activo === 'catalogos' ? 'activo' : '' %>">🗂️ Catálogos</a>
+            <a href="/auditoria" class="<%= activo === 'auditoria' ? 'activo' : '' %>">🛡️ Auditoría</a>
             <% } %>
         </nav>
         <div class="sidebar-pie">
