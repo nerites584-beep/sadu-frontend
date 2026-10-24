@@ -1,5 +1,6 @@
-// Catálogos de la Alcaldía usados en formularios, filtros y reportes.
-// Se publican en app.locals para que todas las vistas los compartan.
+// Estados del documento y valores de respaldo de los catálogos.
+// Los tipos y dependencias vigentes se leen del backend (middlewares/catalogos.js);
+// estas listas solo se usan si el backend no responde.
 
 export const TIPOS_DOCUMENTO = [
     'Acuerdo Municipal', 'Decreto', 'Resolución', 'Acta de Comité',

@@ -29,7 +29,8 @@
         <div class="campo">
             <label for="tipo">Tipo de documento</label>
             <select id="tipo" name="tipo" required>
-                <% catalogos.TIPOS_DOCUMENTO.forEach(t => { %>
+                <% const tipos = documento && documento.tipo && !catalogos.TIPOS_DOCUMENTO.includes(documento.tipo) ? [documento.tipo, ...catalogos.TIPOS_DOCUMENTO] : catalogos.TIPOS_DOCUMENTO %>
+                <% tipos.forEach(t => { %>
                     <option value="<%= t %>" <%= documento && documento.tipo === t ? 'selected' : '' %>>
                         <%= t %>
                     </option>
@@ -51,7 +52,8 @@
         <div class="campo">
             <label for="dependencia">Dependencia</label>
             <select id="dependencia" name="dependencia" required>
-                <% catalogos.DEPENDENCIAS.forEach(d => { %>
+                <% const deps = documento && documento.dependencia && !catalogos.DEPENDENCIAS.includes(documento.dependencia) ? [documento.dependencia, ...catalogos.DEPENDENCIAS] : catalogos.DEPENDENCIAS %>
+                <% deps.forEach(d => { %>
                     <option value="<%= d %>" <%= documento && documento.dependencia === d ? 'selected' : '' %>>
                         <%= d %>
                     </option>
