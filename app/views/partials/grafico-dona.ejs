@@ -1,0 +1,39 @@
+<%# Gráfico de dona en CSS (conic-gradient). Recibe: datos [{ etiqueta, total }], colores { etiqueta: color } %>
+<%
+    const paleta = ['#1a3a5c', '#c8a415', '#24507d', '#1e7e34', '#d98a0b', '#8a94a1', '#b02a37']
+    const suma = datos.reduce((acc, d) => acc + d.total, 0)
+    let acumulado = 0
+    const tramos = datos.map((d, i) => {
+        const inicio = acumulado
+        acumulado += suma ? (d.total / suma) * 100 : 0
+        return {
+            ...d,
+            color: (typeof colores !== 'undefined' && colores[d.etiqueta]) || paleta[i % paleta.length],
+            inicio,
+            fin: acumulado,
+            porcentaje: suma ? Math.round((d.total / suma) * 100) : 0
+        }
+    })
+    const degradado = tramos.map(t => `${t.color} ${t.inicio.toFixed(2)}% ${t.fin.toFixed(2)}%`).join(', ')
+    const descripcion = tramos.map(t => `${t.etiqueta}: ${t.total}`).join(', ')
+%>
+<% if (suma === 0) { %>
+    <p class="grafico-vacio">Sin documentos para graficar.</p>
+<% } else { %>
+<div class="grafico-dona">
+    <div class="dona" role="img" aria-label="Documentos por estado. <%= descripcion %>"
+         style="background: conic-gradient(<%= degradado %>)">
+        <span class="dona-centro"><strong><%= suma %></strong><small>documentos</small></span>
+    </div>
+    <ul class="leyenda">
+        <% tramos.forEach(t => { %>
+        <li>
+            <span class="leyenda-color" style="background: <%= t.color %>"></span>
+            <span class="leyenda-etiqueta"><%= t.etiqueta %></span>
+            <strong><%= t.total %></strong>
+            <small>(<%= t.porcentaje %> %)</small>
+        </li>
+        <% }) %>
+    </ul>
+</div>
+<% } %>

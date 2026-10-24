@@ -1,0 +1,90 @@
+<%- include('../partials/cabecera', { titulo: 'Reportes', usuario, activo: 'reportes' }) %>
+
+<section class="panel">
+    <%- include('../partials/filtros', { accion: '/reportes', filtros }) %>
+</section>
+
+<section class="panel">
+    <div class="encabezado-seccion">
+        <div>
+            <h2>Reporte de documentos</h2>
+            <p class="resultado-busqueda">
+                <%= Object.keys(filtros).length > 0 ? 'Resultados con los filtros aplicados' : 'Todos los documentos del sistema' %>
+            </p>
+        </div>
+        <div class="botones-encabezado">
+            <a href="/reportes/exportar/csv<%= consulta %>" class="btn-secundario">⬇ Exportar Excel (CSV)</a>
+            <a href="/reportes/exportar/pdf<%= consulta %>" class="btn-primary">⬇ Exportar PDF</a>
+        </div>
+    </div>
+
+    <div class="tarjetas tarjetas-compactas">
+        <div class="tarjeta">
+            <span class="tarjeta-valor"><%= reporte.total %></span>
+            <span class="tarjeta-etiqueta">Documentos</span>
+        </div>
+        <div class="tarjeta">
+            <span class="tarjeta-valor"><%= reporte.conArchivo %></span>
+            <span class="tarjeta-etiqueta">Con PDF adjunto</span>
+        </div>
+        <div class="tarjeta">
+            <span class="tarjeta-valor"><%= reporte.porTipo.length %></span>
+            <span class="tarjeta-etiqueta">Tipos documentales</span>
+        </div>
+        <div class="tarjeta">
+            <span class="tarjeta-valor"><%= reporte.porDependencia.length %></span>
+            <span class="tarjeta-etiqueta">Dependencias</span>
+        </div>
+    </div>
+</section>
+
+<div class="rejilla-graficos">
+    <section class="panel">
+        <h2 class="titulo-grafico">Por estado</h2>
+        <%- include('../partials/grafico-dona', { datos: reporte.porEstado, colores: catalogos.COLORES_ESTADO }) %>
+    </section>
+    <section class="panel">
+        <h2 class="titulo-grafico">Por tipo de documento</h2>
+        <%- include('../partials/grafico-barras', { datos: reporte.porTipo }) %>
+    </section>
+    <section class="panel">
+        <h2 class="titulo-grafico">Por dependencia</h2>
+        <%- include('../partials/grafico-barras', { datos: reporte.porDependencia }) %>
+    </section>
+    <section class="panel">
+        <h2 class="titulo-grafico">Por mes de registro</h2>
+        <%- include('../partials/grafico-columnas', { datos: reporte.porMes }) %>
+    </section>
+</div>
+
+<section class="panel panel-separado">
+    <div class="encabezado-seccion">
+        <h2>Resumen por dependencia</h2>
+    </div>
+    <div class="tabla-responsive">
+    <table>
+        <thead>
+            <tr>
+                <th>Dependencia</th>
+                <th>Documentos</th>
+                <th>Porcentaje</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (reporte.porDependencia.length > 0) { %>
+                <% reporte.porDependencia.forEach(d => { %>
+                <tr>
+                    <td><%= d.etiqueta %></td>
+                    <td><%= d.total %></td>
+                    <td><%= Math.round(d.total / reporte.total * 100) %> %</td>
+                </tr>
+                <% }) %>
+            <% } else { %>
+                <tr><td colspan="3">No hay documentos que coincidan con los filtros.</td></tr>
+            <% } %>
+        </tbody>
+    </table>
+    </div>
+</section>
+
+<%- include('../partials/pie') %>

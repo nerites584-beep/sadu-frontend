@@ -1,0 +1,16 @@
+<%# Gráfico de columnas en CSS para series en el tiempo. Recibe: datos [{ etiqueta, total }] %>
+<% const maximo = Math.max(1, ...datos.map(d => d.total)) %>
+<% if (datos.length === 0) { %>
+    <p class="grafico-vacio">Sin documentos para graficar.</p>
+<% } else { %>
+<div class="grafico-columnas" role="img"
+     aria-label="Documentos por mes. <%= datos.map(d => `${d.etiqueta}: ${d.total}`).join(', ') %>">
+    <% datos.forEach(d => { %>
+    <div class="columna">
+        <strong class="columna-valor"><%= d.total %></strong>
+        <span class="columna-area"><span class="columna-barra" style="height: <%= ((d.total / maximo) * 100).toFixed(1) %>%"></span></span>
+        <span class="columna-etiqueta"><%= d.etiqueta %></span>
+    </div>
+    <% }) %>
+</div>
+<% } %>
