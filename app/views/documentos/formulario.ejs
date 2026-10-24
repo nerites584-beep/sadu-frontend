@@ -29,10 +29,7 @@
         <div class="campo">
             <label for="tipo">Tipo de documento</label>
             <select id="tipo" name="tipo" required>
-                <% const tipos = ['Acuerdo Municipal','Decreto','Resolución','Acta de Comité',
-                   'Contrato de Prestación de Servicios','PQRSDF','Oficio de Respuesta',
-                   'Memorando Interno','Circular','Informe','Certificación','Constancia'] %>
-                <% tipos.forEach(t => { %>
+                <% catalogos.TIPOS_DOCUMENTO.forEach(t => { %>
                     <option value="<%= t %>" <%= documento && documento.tipo === t ? 'selected' : '' %>>
                         <%= t %>
                     </option>
@@ -43,7 +40,7 @@
         <div class="campo">
             <label for="estado">Estado</label>
             <select id="estado" name="estado" required>
-                <% ['Activo','En trámite','Archivado','Anulado'].forEach(e => { %>
+                <% catalogos.ESTADOS.forEach(e => { %>
                     <option value="<%= e %>" <%= documento && documento.estado === e ? 'selected' : '' %>>
                         <%= e %>
                     </option>
@@ -54,11 +51,7 @@
         <div class="campo">
             <label for="dependencia">Dependencia</label>
             <select id="dependencia" name="dependencia" required>
-                <% const deps = ['Despacho del Alcalde','Secretaría General','Secretaría de Hacienda',
-                   'Secretaría de Planeación','Secretaría de Infraestructura','Secretaría de Salud',
-                   'Secretaría de Educación','Secretaría de Gobierno','Concejo Municipal',
-                   'Personería Municipal','Control Interno','Oficina Jurídica','Tesorería'] %>
-                <% deps.forEach(d => { %>
+                <% catalogos.DEPENDENCIAS.forEach(d => { %>
                     <option value="<%= d %>" <%= documento && documento.dependencia === d ? 'selected' : '' %>>
                         <%= d %>
                     </option>

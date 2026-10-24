@@ -1,0 +1,49 @@
+<%# Formulario de búsqueda y filtros. Recibe: accion (URL del formulario), filtros (valores actuales) %>
+<form action="<%= accion %>" method="GET" class="filtros" role="search" aria-label="Buscar documentos">
+    <div class="filtro filtro-texto">
+        <label for="q">Buscar</label>
+        <input type="search" id="q" name="q" value="<%= filtros.q || '' %>"
+            placeholder="Radicado o título" maxlength="100">
+    </div>
+    <div class="filtro">
+        <label for="f-estado">Estado</label>
+        <select id="f-estado" name="estado">
+            <option value="">Todos</option>
+            <% catalogos.ESTADOS.forEach(e => { %>
+            <option value="<%= e %>" <%= filtros.estado === e ? 'selected' : '' %>><%= e %></option>
+            <% }) %>
+        </select>
+    </div>
+    <div class="filtro">
+        <label for="f-tipo">Tipo</label>
+        <select id="f-tipo" name="tipo">
+            <option value="">Todos</option>
+            <% catalogos.TIPOS_DOCUMENTO.forEach(t => { %>
+            <option value="<%= t %>" <%= filtros.tipo === t ? 'selected' : '' %>><%= t %></option>
+            <% }) %>
+        </select>
+    </div>
+    <div class="filtro">
+        <label for="f-dependencia">Dependencia</label>
+        <select id="f-dependencia" name="dependencia">
+            <option value="">Todas</option>
+            <% catalogos.DEPENDENCIAS.forEach(d => { %>
+            <option value="<%= d %>" <%= filtros.dependencia === d ? 'selected' : '' %>><%= d %></option>
+            <% }) %>
+        </select>
+    </div>
+    <div class="filtro">
+        <label for="f-desde">Desde</label>
+        <input type="date" id="f-desde" name="desde" value="<%= filtros.desde || '' %>">
+    </div>
+    <div class="filtro">
+        <label for="f-hasta">Hasta</label>
+        <input type="date" id="f-hasta" name="hasta" value="<%= filtros.hasta || '' %>">
+    </div>
+    <div class="filtro-acciones">
+        <button type="submit" class="btn-primary">🔍 Buscar</button>
+        <% if (Object.keys(filtros).length > 0) { %>
+        <a href="<%= accion %>" class="btn-cancelar">Limpiar</a>
+        <% } %>
+    </div>
+</form>
