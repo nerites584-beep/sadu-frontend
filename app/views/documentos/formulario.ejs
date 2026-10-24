@@ -10,6 +10,14 @@
         </div>
     <% } %>
 
+    <% if (accion === 'Actualizar' && documento && catalogos.ESTADOS_CERRADOS.includes(documento.estado)) { %>
+        <div class="alerta alerta-advertencia" role="status">
+            🔒 Este documento está <strong><%= documento.estado.toLowerCase() %></strong>.
+            Como Administrador puede corregirlo o reabrirlo (cambiando el estado a En trámite o Activo);
+            el cambio queda registrado en la auditoría.
+        </div>
+    <% } %>
+
     <form action="" method="POST" class="formulario" enctype="multipart/form-data">
         <div class="campo">
             <label for="radicado">Radicado</label>

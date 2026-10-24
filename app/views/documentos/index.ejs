@@ -59,7 +59,11 @@
                             <% } %>
                         </td>
                         <td class="celda-acciones">
+                            <% if (catalogos.puedeEditar(doc.estado, usuario.rol)) { %>
                             <a href="/documentos/editar/<%= doc.id %>" class="btn-editar">Editar</a>
+                            <% } else { %>
+                            <span class="etiqueta-cerrado" title="Documento <%= doc.estado.toLowerCase() %>: solo el Administrador puede modificarlo">🔒 Cerrado</span>
+                            <% } %>
                             <% if (usuario.rol === 'Administrador') { %>
                             <form action="/documentos/eliminar/<%= doc.id %>" method="POST" style="display:inline">
                                 <button type="submit" class="btn-eliminar"
