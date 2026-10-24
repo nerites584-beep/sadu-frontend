@@ -1,5 +1,6 @@
 import { apiFetch, apiSubirArchivo, apiDescargar, soloFecha, leerFiltros, consultaFiltros } from '../utils/api.js'
 import { guardarAviso } from '../middlewares/aviso.js'
+import { puedeEditar } from '../utils/catalogos.js'
 
 export const listarDocumentos = async (req, res) => {
     try {
@@ -77,6 +78,11 @@ export const verFormularioEditar = async (req, res) => {
     try {
         const { ok, datos: documento } = await apiFetch(req, `/documento/${req.params.id}`)
         if (!ok) return res.redirect('/documentos')
+
+        if (!puedeEditar(documento.estado, req.session.usuario.rol)) {
+            guardarAviso(req, 'error', `El documento ${documento.radicado} está cerrado (${documento.estado}). Solo el Administrador puede modificarlo.`)
+            return res.redirect('/documentos')
+        }
 
         documento.fecha_registro = soloFecha(documento.fecha_registro)
 

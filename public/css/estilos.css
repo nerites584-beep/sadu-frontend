@@ -987,3 +987,23 @@ button:focus-visible {
         break-inside: avoid;
     }
 }
+
+/* ---------- Documentos cerrados (Archivado o Anulado) ---------- */
+
+.etiqueta-cerrado {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 7px;
+    font-size: 13px;
+    background: var(--gris-fondo);
+    color: var(--texto-suave);
+    border: 1px dashed var(--gris-borde);
+    white-space: nowrap;
+    cursor: help;
+}
+
+.alerta-advertencia {
+    background: #fdf0dc;
+    color: #7a4d06;
+    border: 1px solid #f0d29c;
+}

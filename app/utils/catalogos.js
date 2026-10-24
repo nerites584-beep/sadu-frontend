@@ -25,4 +25,10 @@ export const COLORES_ESTADO = {
     'Anulado':    '#b02a37'
 }
 
-export default { TIPOS_DOCUMENTO, DEPENDENCIAS, ESTADOS, COLORES_ESTADO }
+// Documentos cerrados: su trámite terminó y solo el Administrador puede modificarlos
+export const ESTADOS_CERRADOS = ['Archivado', 'Anulado']
+
+export const puedeEditar = (estado, rol) =>
+    rol === 'Administrador' || (rol === 'Funcionario' && !ESTADOS_CERRADOS.includes(estado))
+
+export default { TIPOS_DOCUMENTO, DEPENDENCIAS, ESTADOS, COLORES_ESTADO, ESTADOS_CERRADOS, puedeEditar }
