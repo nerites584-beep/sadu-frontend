@@ -1,13 +1,31 @@
 <%- include('../partials/cabecera', { titulo: 'Gestión de Documentos', usuario, activo: 'documentos' }) %>
 
+<% const puedeGestionar = usuario.rol === 'Administrador' || usuario.rol === 'Funcionario' %>
+<% const consulta = new URLSearchParams(filtros).toString() %>
+
+<section class="panel">
+    <%- include('../partials/filtros', { accion: '/documentos', filtros }) %>
+</section>
+
 <section class="panel">
     <div class="encabezado-seccion">
-        <h2>Documentos radicados</h2>
-        <% if (usuario.rol === 'Administrador' || usuario.rol === 'Funcionario') { %>
-        <a href="/documentos/nuevo" class="btn-primary">+ Nuevo Documento</a>
+        <div>
+            <h2>Documentos radicados</h2>
+            <p class="resultado-busqueda">
+                <%= documentos.length %> documento(s)
+                <%= Object.keys(filtros).length > 0 ? 'coinciden con la búsqueda' : 'en total' %>
+            </p>
+        </div>
+        <% if (puedeGestionar) { %>
+        <div class="botones-encabezado">
+            <a href="/reportes/exportar/csv<%= consulta ? '?' + consulta : '' %>" class="btn-secundario">⬇ Excel</a>
+            <a href="/reportes/exportar/pdf<%= consulta ? '?' + consulta : '' %>" class="btn-secundario">⬇ PDF</a>
+            <a href="/documentos/nuevo" class="btn-primary">+ Nuevo Documento</a>
+        </div>
         <% } %>
     </div>
 
+    <div class="tabla-responsive">
     <table>
         <thead>
             <tr>
@@ -18,7 +36,7 @@
                 <th>Dependencia</th>
                 <th>Fecha</th>
                 <th>Responsable</th>
-                <% if (usuario.rol !== 'Consulta') { %><th>PDF</th><th>Acciones</th><% } %>
+                <% if (puedeGestionar) { %><th>PDF</th><th>Acciones</th><% } %>
             </tr>
         </thead>
         <tbody>
@@ -32,7 +50,7 @@
                         <td><%= doc.dependencia %></td>
                         <td><%= doc.fecha_registro %></td>
                         <td><%= doc.usuario_nombre || '—' %></td>
-                        <% if (usuario.rol !== 'Consulta') { %>
+                        <% if (puedeGestionar) { %>
                         <td>
                             <% if (doc.archivo) { %>
                             <a href="/documentos/<%= doc.id %>/archivo" target="_blank" rel="noopener" class="btn-pdf">Ver PDF</a>
@@ -45,7 +63,7 @@
                             <% if (usuario.rol === 'Administrador') { %>
                             <form action="/documentos/eliminar/<%= doc.id %>" method="POST" style="display:inline">
                                 <button type="submit" class="btn-eliminar"
-                                    onclick="return confirm('¿Eliminar este documento?')">
+                                    onclick="return confirm('¿Eliminar el documento <%= doc.radicado %>?')">
                                     Eliminar
                                 </button>
                             </form>
@@ -56,11 +74,16 @@
                 <% }) %>
             <% } else { %>
                 <tr>
-                    <td colspan="9">No hay documentos registrados.</td>
+                    <td colspan="9">
+                        <%= Object.keys(filtros).length > 0
+                            ? 'Ningún documento coincide con la búsqueda. Pruebe con otros filtros.'
+                            : 'No hay documentos registrados.' %>
+                    </td>
                 </tr>
             <% } %>
         </tbody>
     </table>
+    </div>
 </section>
 
 <%- include('../partials/pie') %>

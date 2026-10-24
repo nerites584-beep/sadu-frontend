@@ -1,0 +1,17 @@
+<%# Gráfico de barras horizontales en CSS. Recibe: datos [{ etiqueta, total }] %>
+<% const maximo = Math.max(1, ...datos.map(d => d.total)) %>
+<% if (datos.length === 0) { %>
+    <p class="grafico-vacio">Sin documentos para graficar.</p>
+<% } else { %>
+<ul class="grafico-barras">
+    <% datos.forEach(d => { %>
+    <li>
+        <span class="barra-etiqueta" title="<%= d.etiqueta %>"><%= d.etiqueta %></span>
+        <span class="barra-pista" role="img" aria-label="<%= d.etiqueta %>: <%= d.total %>">
+            <span class="barra-relleno" style="width: <%= ((d.total / maximo) * 100).toFixed(1) %>%"></span>
+        </span>
+        <strong class="barra-valor"><%= d.total %></strong>
+    </li>
+    <% }) %>
+</ul>
+<% } %>

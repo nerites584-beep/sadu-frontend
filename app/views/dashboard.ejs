@@ -5,25 +5,45 @@
         <span class="tarjeta-valor"><%= resumen.total %></span>
         <span class="tarjeta-etiqueta">Documentos totales</span>
     </div>
-    <div class="tarjeta">
-        <span class="tarjeta-valor"><%= resumen['Activo'] || 0 %></span>
+    <div class="tarjeta tarjeta-activo">
+        <span class="tarjeta-valor"><%= porEstado['Activo'] || 0 %></span>
         <span class="tarjeta-etiqueta">Activos</span>
     </div>
-    <div class="tarjeta">
-        <span class="tarjeta-valor"><%= resumen['En trámite'] || 0 %></span>
+    <div class="tarjeta tarjeta-tramite">
+        <span class="tarjeta-valor"><%= porEstado['En trámite'] || 0 %></span>
         <span class="tarjeta-etiqueta">En trámite</span>
     </div>
-    <div class="tarjeta">
-        <span class="tarjeta-valor"><%= resumen['Archivado'] || 0 %></span>
+    <div class="tarjeta tarjeta-archivado">
+        <span class="tarjeta-valor"><%= porEstado['Archivado'] || 0 %></span>
         <span class="tarjeta-etiqueta">Archivados</span>
+    </div>
+    <div class="tarjeta">
+        <span class="tarjeta-valor"><%= resumen.total ? Math.round(resumen.conArchivo / resumen.total * 100) : 0 %> %</span>
+        <span class="tarjeta-etiqueta">Con PDF digitalizado (<%= resumen.conArchivo %>)</span>
     </div>
 </div>
 
-<section class="panel">
+<div class="rejilla-graficos">
+    <section class="panel">
+        <h2 class="titulo-grafico">Documentos por estado</h2>
+        <%- include('partials/grafico-dona', { datos: resumen.porEstado, colores: catalogos.COLORES_ESTADO }) %>
+    </section>
+    <section class="panel">
+        <h2 class="titulo-grafico">Documentos por dependencia</h2>
+        <%- include('partials/grafico-barras', { datos: resumen.porDependencia.slice(0, 6) }) %>
+    </section>
+    <section class="panel panel-ancho">
+        <h2 class="titulo-grafico">Documentos registrados por mes</h2>
+        <%- include('partials/grafico-columnas', { datos: resumen.porMes.slice(-12) }) %>
+    </section>
+</div>
+
+<section class="panel panel-separado">
     <div class="encabezado-seccion">
         <h2>Documentos recientes</h2>
         <a href="/documentos" class="btn-secundario">Ver todos</a>
     </div>
+    <div class="tabla-responsive">
     <table>
         <thead>
             <tr>
@@ -50,6 +70,7 @@
             <% } %>
         </tbody>
     </table>
+    </div>
 </section>
 
 <%- include('partials/pie') %>

@@ -3,6 +3,7 @@ import authRoutes from './auth.routes.js'
 import dashboardRoutes from './dashboard.routes.js'
 import documentoRoutes from './documento.routes.js'
 import usuarioRoutes from './usuario.routes.js'
+import reporteRoutes from './reporte.routes.js'
 
 const router = Router()
 
@@ -15,5 +16,6 @@ router.use(authRoutes)
 router.use(dashboardRoutes)
 router.use(documentoRoutes)
 router.use(usuarioRoutes)
+router.use(reporteRoutes)
 
 export default router

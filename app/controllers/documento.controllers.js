@@ -1,8 +1,10 @@
-import { apiFetch, apiSubirArchivo, apiDescargar, soloFecha } from '../utils/api.js'
+import { apiFetch, apiSubirArchivo, apiDescargar, soloFecha, leerFiltros, consultaFiltros } from '../utils/api.js'
+import { guardarAviso } from '../middlewares/aviso.js'
 
 export const listarDocumentos = async (req, res) => {
     try {
-        const { ok, status, datos: documentos } = await apiFetch(req, '/documento')
+        const filtros = leerFiltros(req.query)
+        const { ok, status, datos: documentos } = await apiFetch(req, `/documento${consultaFiltros(filtros)}`)
 
         if (status === 401) return res.redirect('/logout')
         if (!ok) throw new Error('Error consultando documentos')
@@ -12,6 +14,7 @@ export const listarDocumentos = async (req, res) => {
         res.render('documentos/index', {
             usuario: req.session.usuario,
             documentos,
+            filtros,
             error: null
         })
     } catch {
@@ -63,6 +66,7 @@ export const crearDocumento = async (req, res) => {
                 return res.redirect(`/documentos/editar/${datos.id}?pdf=error`)
             }
         }
+        guardarAviso(req, 'exito', datos?.mensaje || 'Documento radicado correctamente')
         res.redirect('/documentos')
     } catch {
         res.status(500).send('Error de conexión al crear documento')
@@ -121,6 +125,7 @@ export const editarDocumento = async (req, res) => {
                 })
             }
         }
+        guardarAviso(req, 'exito', 'Documento actualizado correctamente')
         res.redirect('/documentos')
     } catch {
         res.status(500).send('Error de conexión al actualizar documento')
@@ -150,7 +155,8 @@ export const verArchivo = async (req, res) => {
 
 export const eliminarDocumento = async (req, res) => {
     try {
-        await apiFetch(req, `/documento/${req.params.id}`, { method: 'DELETE' })
+        const { ok, datos } = await apiFetch(req, `/documento/${req.params.id}`, { method: 'DELETE' })
+        guardarAviso(req, ok ? 'exito' : 'error', datos?.mensaje || (ok ? 'Documento eliminado' : 'No fue posible eliminar el documento'))
         res.redirect('/documentos')
     } catch {
         res.status(500).send('Error de conexión al eliminar documento')

@@ -49,3 +49,20 @@ export const apiDescargar = async (req, ruta) =>
     globalThis.fetch(`${config.backendUrl}${ruta}`, {
         headers: { Authorization: `Bearer ${req.session?.token}` }
     })
+
+// Filtros de búsqueda que se reenvían al backend tal como llegan en la URL
+const CAMPOS_FILTRO = ['q', 'estado', 'tipo', 'dependencia', 'desde', 'hasta']
+
+export const leerFiltros = (query = {}) => {
+    const filtros = {}
+    for (const campo of CAMPOS_FILTRO) {
+        const valor = typeof query[campo] === 'string' ? query[campo].trim() : ''
+        if (valor) filtros[campo] = valor
+    }
+    return filtros
+}
+
+export const consultaFiltros = (filtros) => {
+    const texto = new URLSearchParams(filtros).toString()
+    return texto ? `?${texto}` : ''
+}
