@@ -6,11 +6,19 @@ import config from './config/environments/index.js'
 import routes from './routes/index.js'
 import catalogos from './utils/catalogos.js'
 import { mostrarAviso } from './middlewares/aviso.js'
+import { verificarEntorno } from './config/environments/verificar.js'
+import { cabecerasSeguridad, paginaNoEncontrada, manejadorErrores } from './middlewares/seguridad.js'
+
+// Si falta una variable obligatoria el servidor no arranca y dice cuál falta
+verificarEntorno()
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const server = express()
+
+server.disable('x-powered-by')   // no revelar que el servidor usa Express
+server.use(cabecerasSeguridad)
 
 server.set('view engine', 'ejs')
 server.set('views', path.join(__dirname, 'views'))
@@ -29,12 +37,17 @@ server.use(session({
     saveUninitialized: false,
     cookie: {
         httpOnly: true,          // la cookie no es accesible desde JavaScript del navegador
+        sameSite: 'lax',         // la cookie no viaja en peticiones iniciadas por otros sitios (CSRF)
         maxAge: 8 * 60 * 60 * 1000  // 8 horas, igual que la expiración del token
     }
 }))
 
 server.use(mostrarAviso)
 server.use(routes)
+
+// Siempre al final: página inexistente y errores no controlados
+server.use(paginaNoEncontrada)
+server.use(manejadorErrores)
 
 server.listen(config.port, () => {
     console.log(`Servidor SADU frontend corriendo en el puerto ${config.port}`)
